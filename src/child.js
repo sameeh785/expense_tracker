@@ -6,19 +6,7 @@ export default function Child(){
     let {transactions,addTransaction, deleteFromTransaction} = useContext(Content)
     let [description,setDesc] = useState('');
     let [Amount,setAmount] = useState('');
-    function register(event){
-        console.log(Amount)
-        event.preventDefault();
-        addTransaction({
-            type : description,
-            amount : parseInt(Amount)
-        })
-        
-        document.getElementById('name').value = '';
-        document.getElementById('Value').value = '';
-
-
-    }
+    // let [total,setTotal] = useState(0);
     function  calculateExpense(){
         let expense = 0;
         for(let i =0; i<transactions.length;i++){
@@ -27,7 +15,7 @@ export default function Child(){
 
          }
         }
-        console.log(expense)
+       
         return expense;
     } 
     function  calculateIncome(){
@@ -35,12 +23,61 @@ export default function Child(){
         for(let i =0; i<transactions.length;i++){
             if(transactions[i].amount > 0){
         sum +=transactions[i].amount
-        console.log(sum)
+     
 
          }
         }
         return sum;
     }  
+
+    function register(event){
+   
+        event.preventDefault();
+    //    if(Amount <= calculateIncome()-calculateExpense()){
+    //     addTransaction({
+    //         type : description,
+    //         amount : parseInt(Amount)
+    //     })
+
+    //    }
+    //    else{
+    //        alert('Please enter the price below than' + calculateIncome())
+    //    }
+
+    //   setTotal(calculateIncome() + calculateExpense())
+    //   console.log(total)
+        if(Amount < 0){
+        const a1 = Amount.substr(1,Amount.length-1);
+        if( (calculateIncome() + calculateExpense()) == 0){
+            alert('Plz enter come income first')
+
+        }
+        else if(a1 <= (calculateIncome() + calculateExpense())  ){
+            addTransaction({
+                type : description,
+                amount : parseInt(Amount)
+            })
+
+
+           }
+           else{
+            alert('Please enter the price below than ' + (calculateIncome() + calculateExpense()))
+           }
+        }
+        else{
+            addTransaction({
+                        type : description,
+                        amount : parseInt(Amount)
+                    })
+
+        }
+
+        document.getElementById('name').value = '';
+        document.getElementById('Value').value = '';
+
+
+    }
+
     function  deleteItem(index) {
 
         transactions.splice(index,1)
@@ -53,7 +90,9 @@ export default function Child(){
             <h1 id="head">Expensive Tracker</h1>
             <div id="subhead">
             <h3 >You Balance <br/>
-            {calculateIncome() + calculateExpense()}$</h3>
+            {
+            calculateIncome() + calculateExpense()
+            }$</h3>
             <div id="section1">
                 <div><h2 className="green">Income <br/> {calculateIncome()}$</h2></div>
                 <div><h2 className="red">Expense <br/> {calculateExpense()}$</h2></div>
